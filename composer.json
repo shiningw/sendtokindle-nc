@@ -1,0 +1,15 @@
+{
+    "name": "Sendto K Indle",
+    "description": "send ebooks to kindle device",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "jiaxin huang"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    }
+}
