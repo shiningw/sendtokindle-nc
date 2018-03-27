@@ -33,11 +33,9 @@ OCA.SendtoKindle.App = {
 			iconClass: 'icon-share',
 			actionHandler: function(filename, context) {
 				var fileList = context.fileList;
-				var tr = fileList.findFileEl(filename);
-				//$(tr).after('<p>test</p>');
-				//console.log(fileList.elementToFile(tr));
-				//console.log(JSON.stringify([filename]));
+				
 				var url = OC.filePath('sendtokindle', 'ajax', 'mail.php');
+				$('#kindle-alert').addClass('sending').text('Sending').show();
 				//var url = '/test.php';
 				$.post(url, {
 						file: filename,
@@ -45,18 +43,15 @@ OCA.SendtoKindle.App = {
 					},
 					
 				).done(function(data){
+					$('#kindle-alert').removeClass('sending');
 						if (data.status == 'success') {
-							
-							
 							$('#kindle-alert').addClass('success');
-							//alert('sent');
 						}else {
 							$('#kindle-alert').addClass('error');
 						}
 						OC.msg.finishedAction('#kindle-alert',data);
-							
+
 					  });
-				//console.log(oc_current_user);
 			}
 		});
 	}
