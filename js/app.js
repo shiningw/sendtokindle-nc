@@ -4,64 +4,59 @@
 OCA.SendtoKindle = {};
 
 OCA.SendtoKindle.App = {
-	_initialized: false,
-
-	initialize: function($el) {
-		if (this._initialized) {
-			return;
-		}
-		this._initialized = true;
-		$('#file_action_panel').after('<div id="kindle-alert" style="display:none;"></div>');
-		this._createFileActions();
-	},
-
-	_createFileActions: function() {
-		var fileActions = OCA.Files.fileActions;
-		fileActions.register('dir', 'Open', OC.PERMISSION_READ, '', function (filename, context) {
-				var dir = context.$file.attr('data-path') || context.fileList.getCurrentDirectory();
-				context.fileList.changeDirectory(OC.joinPaths(dir, filename), true, false, parseInt(context.$file.attr('data-id'), 10));
-			});
-			
-		fileActions.setDefault('dir', 'Open');
-		//console.log(fileActions.getCurrentMimeType());
-
-		fileActions.registerAction({
-			name: 'Kindle',
-			displayName: t('files', 'Send to Kindle'),
-			mime: 'all',
-			permissions: OC.PERMISSION_READ,
-			iconClass: 'icon-share',
-			actionHandler: function(filename, context) {
-				var fileList = context.fileList;
-				
-				var url = OC.filePath('sendtokindle', 'ajax', 'mail.php');
-				$('#kindle-alert').addClass('sending').text('Sending').show();
-				//var url = '/test.php';
-				$.post(url, {
-						file: filename,
-						dir: fileList.getCurrentDirectory()
-					},
-					
-				).done(function(data){
-					$('#kindle-alert').removeClass('sending');
-						if (data.status == 'success') {
-							$('#kindle-alert').addClass('success');
-						}else {
-							$('#kindle-alert').addClass('error');
-						}
-						OC.msg.finishedAction('#kindle-alert',data);
-
-					  });
-			}
-		});
-	}
+    _initialized: false,
+    initialize: function ($el) {
+        if (this._initialized) {
+            return;
+        }
+        this._initialized = true;
+        $('#file_action_panel').after('<div id="kindle-alert" style="display:none;"></div>');
+        //console.log(OCA.Files.FileList);
+        this._createFileActions();
+    },
+    _createFileActions: function () {
+        var fileActions = OCA.Files.fileActions;
+        var mimes = ['application/x-mobipocket-ebook', 'application/pdf', 'Application/vnd.amazon.ebook', 'AZW/Mobi', 'Application/epub+zip', 'text', 'Application/x-fictionbook+xml','Application/x-ms-reader','Application/x-rocketbook','application/x-newton-compatible-pkg','PRC'];
+        fileActions.setDefault('dir', 'Open');
+        //console.log(fileActions.getCurrentMimeType());
+        var actionHandler = function (filename, context) {
+            var fileList = context.fileList;
+            var url = OC.filePath('sendtokindle', 'ajax', 'mail.php');
+            $('#kindle-alert').addClass('sending').text('Sending...Please give it a few seconds').show();
+            $.post(url, {
+                file: filename,
+                dir: fileList.getCurrentDirectory()
+            },
+                    ).done(function (data) {
+                $('#kindle-alert').removeClass('sending');
+                if (data.status == 'success') {
+                    $('#kindle-alert').addClass('success');
+                } else {
+                    $('#kindle-alert').addClass('error');
+                }
+                OC.msg.finishedAction('#kindle-alert', data);
+            });
+        };
+        var params = {
+            name: 'Kindle',
+            displayName: t('files', 'Send to Kindle'),
+            permissions: OC.PERMISSION_READ,
+            //mime: 'application/x-mobipocket-ebook',
+            iconClass: 'icon-share',
+            actionHandler: actionHandler,
+        };
+        for (i = 0; mime = mimes[i]; i++) {
+            params.mime = mime;
+            fileActions.registerAction(params);
+        }
+    }
 };
 
-$(document).ready(function() {
-	$('#app-content-files').one('show', function() {
-		var App = OCA.SendtoKindle.App;
-		App.initialize($('#app-content-files'));
-		// force breadcrumb init
-		// App.fileList.changeDirectory(App.fileList.getCurrentDirectory(), false, true);
-	});
+$(document).ready(function () {
+    $('#app-content-files').one('show', function () {
+        var App = OCA.SendtoKindle.App;
+        App.initialize($('#app-content-files'));
+        // force breadcrumb init
+        // App.fileList.changeDirectory(App.fileList.getCurrentDirectory(), false, true);
+    });
 });
