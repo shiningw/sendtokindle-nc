@@ -8,13 +8,13 @@
  * it's instantiated in there
  */
  
-$this->create('sendtokindle_ajax_mail', 'ajax/mail.php')
+/*$this->create('sendtokindle_ajax_mail', 'ajax/mail.php')
 	->actionInclude('sendtokindle/ajax/mail.php');
-
+*/
 return [
     'routes' => [
-	   ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-	   ['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
+	   ['name' => 'kindle#send', 'url' => 'kindle/send.php', 'verb' => 'POST'],
+           ['name' => 'test#fire','url' => 'kind']
     ]
 ];
 

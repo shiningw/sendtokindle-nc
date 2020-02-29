@@ -16,12 +16,12 @@ OCA.SendtoKindle.App = {
     },
     _createFileActions: function () {
         var fileActions = OCA.Files.fileActions;
-        var mimes = ['application/x-mobipocket-ebook', 'application/pdf', 'Application/vnd.amazon.ebook', 'AZW/Mobi', 'Application/epub+zip', 'text', 'Application/x-fictionbook+xml','Application/x-ms-reader','Application/x-rocketbook','application/x-newton-compatible-pkg','PRC'];
+        var mimes = ['application/x-mobipocket-ebook', 'application/pdf', 'application/vnd.amazon.ebook', 'AZW/Mobi', 'application/epub+zip', 'text', 'application/x-ms-reader','Application/x-rocketbook','application/x-newton-compatible-pkg','PRC'];
         fileActions.setDefault('dir', 'Open');
         //console.log(fileActions.getCurrentMimeType());
         var actionHandler = function (filename, context) {
             var fileList = context.fileList;
-            var url = OC.filePath('sendtokindle', 'ajax', 'mail.php');
+            var url = OC.filePath('sendtokindle', 'kindle', 'send.php');
             $('#kindle-alert').addClass('sending').text('Sending...Please give it a few seconds').show();
             $.post(url, {
                 file: filename,

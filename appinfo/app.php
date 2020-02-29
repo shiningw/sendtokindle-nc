@@ -11,7 +11,7 @@
 
 //namespace OCA\sendtokindle\AppInfo;
 
-$l = \OC::$server->getL10N('sendtokindle');
+/*$l = \OC::$server->getL10N('sendtokindle');
 
 \OC::$server->getNavigationManager()->add([
     'id' => 'sendtokindle',
@@ -20,7 +20,7 @@ $l = \OC::$server->getL10N('sendtokindle');
     'appname' => 'sendtokindle',
     'script' => 'list.php',
     
-]);
+]);*/
 
 OCP\Util::addScript('sendtokindle', 'app');
 OCP\Util::addStyle('sendtokindle', 'style');
